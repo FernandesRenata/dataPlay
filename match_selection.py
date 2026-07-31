@@ -3,7 +3,7 @@ from statsbombpy import sb
 def match_selection(matches):
 
     print("Let's analyze Women's World Cup\n\n")
-    
+
     home_team = matches["home_team"].tolist()
     away_team = matches["away_team"].tolist()
 
@@ -17,11 +17,9 @@ def match_selection(matches):
     team_one = ''
     team_two = ''
 
-    print("\nChoose the first team:\n")
-    input(team_one)
-
-    print("\nChoose the second team:\n")
-    input(team_two)
+    
+    team_one = input("\nChoose the first team:\n")
+    team_two = input("\nChoose the second team:\n")
 
 
     return(team_one, team_two, teams)
