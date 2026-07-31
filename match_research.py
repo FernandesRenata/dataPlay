@@ -1,28 +1,14 @@
 from statsbombpy import sb
 
-matches = sb.matches(
-    competition_id=43,
-    season_id=106
-)
+def target_matches(team_one, team_two, teams, matches):
+    team_one = teams[17]
+    team_two = teams[20]
 
-home_team = matches["home_team"].tolist()
-away_team = matches["away_team"].tolist()
+    target_matches = matches[
+        ((matches['home_team'] == team_one) & (matches['away_team'] == team_two)) |
+        ((matches['home_team'] == team_two) & (matches['away_team'] == team_one))
+    ]
 
-teams = home_team + away_team
+    target_matches = target_matches['match_id'].tolist()
 
-teams = sorted(list(set(teams)))
-
-for i in range(len(teams)):
-    print(f"{i} - {teams[i]}")
-
-team_one = teams[17]
-team_two = teams[20]
-
-target_matches = matches[
-    ((matches['home_team'] == team_one) & (matches['away_team'] == team_two)) |
-    ((matches['home_team'] == team_two) & (matches['away_team'] == team_one))
-]
-
-target_matches =  target_matches['match_id'].tolist()
-
-print(target_matches)
+    return target_matches
