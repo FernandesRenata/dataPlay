@@ -18,8 +18,10 @@ def match_selection(matches):
     team_two = ''
 
     
-    team_one = input("\nChoose the first team:\n")
-    team_two = input("\nChoose the second team:\n")
+    team_one = int(input("\nChoose the first team:\n"))
+    team_two = int(input("\nChoose the second team:\n"))
 
+    team_one = teams[team_one]
+    team_two = teams[team_two]
 
     return(team_one, team_two, teams)
