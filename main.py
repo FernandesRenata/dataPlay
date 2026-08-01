@@ -3,7 +3,7 @@ from statsbombpy import sb
 from match_statistics import match_summary
 from match_selection import match_selection
 from match_research import target_matches
-import  pandas as pd
+from heatmap import team_heatmap
 
 matches = sb.matches(
     competition_id=72,
@@ -27,3 +27,4 @@ target_id = int(input("\nChoose the match:\n"))
 target_id = match_ids[target_id]
 
 print(match_summary(target_id))
+
