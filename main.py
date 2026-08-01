@@ -1,13 +1,17 @@
 from statsbombpy import sb
-from player_events import calculate_player_statistics
-from player_by_game_time import calculate_minutes
-from team_selection import team_selection
-
 import pandas as pd
 
+from team_selection import team_selection
+from player_events import calculate_player_statistics
+from player_by_game_time import calculate_minutes
+from feature_engineering import create_features
+
+COMPETITION_ID = 72
+SEASON_ID = 107
+
 matches = sb.matches(
-    competition_id=72,
-    season_id=107
+    competition_id=COMPETITION_ID,
+    season_id=SEASON_ID
 )
 
 team = team_selection(matches)
@@ -29,7 +33,6 @@ for match_id in matches["match_id"]:
 
     minutes = calculate_minutes(events)
 
-
     stats = stats.merge(
         minutes,
         on="player",
@@ -38,20 +41,42 @@ for match_id in matches["match_id"]:
 
     season_statistics.append(stats)
 
+
 season_statistics = pd.concat(
     season_statistics,
     ignore_index=True
 )
 
-numeric_columns = season_statistics.select_dtypes(
-    include="number"
-).columns
+numeric_columns = [
+    "passes",
+    "completed_passes",
+    "progressive_passes",
+    "key_passes",
+    "assists",
+    "shots",
+    "goals",
+    "xG",
+    "xA",
+    "dribbles",
+    "recoveries",
+    "interceptions",
+    "pressures",
+    "tackles",
+    "minutes"
+]
 
 season_statistics = (
     season_statistics
-    .groupby(["player", "team"], as_index=False)[numeric_columns]
+    .groupby(
+        ["player", "team"],
+        as_index=False
+    )[numeric_columns]
     .sum()
 )
+
+season_statistics = season_statistics[
+    season_statistics["minutes"] > 0
+]
 
 metrics = [
     "passes",
@@ -76,6 +101,10 @@ for metric in metrics:
         season_statistics[metric] /
         season_statistics["minutes"]
     ) * 90
+
+season_statistics = create_features(
+    season_statistics
+)
 
 season_statistics.to_csv(
     "team_statistics.csv",
