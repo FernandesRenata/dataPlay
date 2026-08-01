@@ -26,17 +26,16 @@ def pass_accuracy(player_events):
 
 def count_progressive_passes(player_events):
     if "pass_progressive" not in player_events.columns:
-        return None
+        return 0
 
     return (
         (player_events["type"] == "Pass") &
         (player_events["pass_progressive"] == True)
     ).sum()
 
-
 def count_key_passes(player_events):
     if "pass_shot_assist" not in player_events.columns:
-        return None
+        return 0
 
     return (
         (player_events["type"] == "Pass") &
@@ -46,7 +45,7 @@ def count_key_passes(player_events):
 
 def count_assists(player_events):
     if "pass_goal_assist" not in player_events.columns:
-        return None
+        return 0
 
     return (
         (player_events["type"] == "Pass") &
@@ -70,13 +69,13 @@ def count_goals(player_events):
     if "shot_outcome_name" in shots.columns:
         return (shots["shot_outcome_name"] == "Goal").sum()
 
-    return None
+    return 0
 
 
 def xg(player_events):
 
     if "shot_statsbomb_xg" not in player_events.columns:
-        return None
+        return 0
 
     return player_events["shot_statsbomb_xg"].fillna(0).sum()
 
@@ -84,7 +83,7 @@ def xg(player_events):
 def xa(player_events):
 
     if "pass_expected_assist" not in player_events.columns:
-        return None
+        return 0
 
     return player_events["pass_expected_assist"].fillna(0).sum()
 
