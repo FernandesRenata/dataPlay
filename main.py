@@ -170,5 +170,4 @@ top3_midfielders.to_csv(
 
 goals_xg_p90_barplot(season_statistics)
 
-goals_p90_histogram(season_statistics)
 
