@@ -65,4 +65,9 @@ def create_features(player_statistics):
         df["pressures"]
     )
 
+    df["midfield_contribution"] = (
+        df["key_passes"] +
+        df["xA"] +
+        df["dribbles"] 
+    )
     return df

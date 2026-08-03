@@ -122,8 +122,53 @@ season_statistics.to_csv(
     index=False,
     encoding="utf-8-sig"
 )
-goals_xg_p90_barplot(season_statistics)
 
+top3_defenders = (
+    season_statistics
+    .sort_values(
+        by="defensive_actions",
+        ascending=False
+    )
+    .head(3)
+)
+
+top3_attackers = (
+    season_statistics
+    .sort_values(
+        by="offensive_contribution",
+        ascending=False
+    )
+    .head(3)
+)
+
+top3_midfielders = (
+    season_statistics
+    .sort_values(
+        by="midfield_contribution",
+        ascending=False
+    )
+    .head(3)
+)
+
+top3_attackers.to_csv(
+    "top3_attackers.csv",
+    index=False,
+    encoding="utf-8-sig"
+)
+
+top3_defenders.to_csv(
+    "top3_defenders.csv",
+    index=False,
+    encoding="utf-8-sig"
+)
+
+top3_midfielders.to_csv(
+    "top3_midfielders.csv",
+    index=False,
+    encoding="utf-8-sig"
+)
+
+goals_xg_p90_barplot(season_statistics)
 
 goals_p90_histogram(season_statistics)
 
