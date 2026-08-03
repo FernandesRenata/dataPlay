@@ -1,13 +1,19 @@
 from statsbombpy import sb
 import pandas as pd
-from visualization import goals_p90_histogram
+import warnings
+from statsbombpy.api_client import NoAuthWarning
 
-from team_selection import team_selection
-from player_events import calculate_player_statistics
-from player_by_game_time import calculate_minutes
-from feature_engineering import create_features
-from visualization import goals_xg_p90_barplot
-from visualization import goals_p90_histogram
+
+
+from src.visualization.charts import goals_p90_histogram
+from src.data.team_selection import team_selection
+from src.features.player_events import calculate_player_statistics
+from src.features.player_by_game_time import calculate_minutes
+from src.features.feature_engineering import create_features
+from src.visualization.charts import goals_xg_p90_barplot
+from src.visualization.charts import goals_p90_histogram
+
+warnings.filterwarnings("ignore", category=NoAuthWarning)
 
 COMPETITION_ID = 72
 SEASON_ID = 107
@@ -18,6 +24,8 @@ matches = sb.matches(
 )
 
 team = team_selection(matches)
+
+print("...loading data for team:", team)
 
 season_statistics = []
 
@@ -51,20 +59,20 @@ season_statistics = pd.concat(
 )
 
 numeric_columns = [
-    "passes",
-    "completed_passes",
-    "progressive_passes",
-    "key_passes",
-    "assists",
-    "shots",
-    "goals",
+    "passes",   #mid-field
+    "completed_passes", #mid-field
+    "progressive_passes",   #mid-field
+    "key_passes",   #mid-field
+    "assists",  #attacking
+    "shots",    #attacking
+    "goals",    #attacking
     "xG",
     "xA",
     "dribbles",
-    "recoveries",
-    "interceptions",
-    "pressures",
-    "tackles",
+    "recoveries",   #defensive
+    "interceptions",    #defensive
+    "pressures",    #defensive
+    "tackles",  #defensive
     "minutes"
 ]
 
@@ -119,4 +127,3 @@ goals_xg_p90_barplot(season_statistics)
 
 goals_p90_histogram(season_statistics)
 
-print(season_statistics.head())
