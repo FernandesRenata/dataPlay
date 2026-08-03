@@ -5,13 +5,16 @@ from statsbombpy.api_client import NoAuthWarning
 
 
 
-from src.visualization.charts import goals_p90_histogram
+
 from src.data.team_selection import team_selection
 from src.features.player_events import calculate_player_statistics
+from src.features.player_events import calculate_players_statistics
 from src.features.player_by_game_time import calculate_minutes
 from src.features.feature_engineering import create_features
 from src.visualization.charts import goals_xg_p90_barplot
-from src.visualization.charts import goals_p90_histogram
+from src.visualization.charts import pressures_and_tackles_p90_barplot
+from src.visualization.charts import passes_completed_passes_p90_barplot
+
 
 warnings.filterwarnings("ignore", category=NoAuthWarning)
 
@@ -22,6 +25,8 @@ matches = sb.matches(
     competition_id=COMPETITION_ID,
     season_id=SEASON_ID
 )
+player = input("Choose a player to analyze:\n")
+player_statistics = []
 
 team = team_selection(matches)
 
@@ -40,7 +45,8 @@ for match_id in matches["match_id"]:
     if events.empty:
         continue
 
-    stats = calculate_player_statistics(events)
+    stats = calculate_players_statistics(events)
+    player_statistics = calculate_player_statistics(events, player)
 
     minutes = calculate_minutes(events)
 
@@ -49,6 +55,7 @@ for match_id in matches["match_id"]:
         on="player",
         how="left"
     )
+    
 
     season_statistics.append(stats)
 
@@ -168,6 +175,11 @@ top3_midfielders.to_csv(
     encoding="utf-8-sig"
 )
 
-goals_xg_p90_barplot(season_statistics)
+goals_xg_p90_barplot(player_statistics)
+pressures_and_tackles_p90_barplot(player_statistics)
+passes_completed_passes_p90_barplot(player_statistics)
+
+
+print("Charts and statistics have been generated.")
 
 
