@@ -100,92 +100,87 @@ def passes_completed_passes_p90_barplot(df):
     plt.tight_layout()
     plt.show()
 
-    def pressures_and_tackles_p90_barplot(df):
-        df = df.sort_values(
-            by="pressures_p90",
-            ascending=False
-        ).head(10)
+def pressures_and_tackles_p90_barplot(df):
+    df = df.sort_values(
+        by="pressures_p90",
+        ascending=False
+    ).head(10)
 
-        fig, ax = plt.subplots(figsize=(12, 6))
+    fig, ax = plt.subplots(figsize=(12, 6))
 
-        x = range(len(df))
-        width = 0.4
+    x = range(len(df))
+    width = 0.4
 
-        ax.bar(
-            [i - width/2 for i in x],
-            df["pressures_p90"],
-            width,
-            label="Pressures p90"
-        )
+    ax.bar(
+        [i - width/2 for i in x],
+        df["pressures_p90"],
+        width,
+        label="Pressures p90"
+    )
 
-        ax.bar(
-            [i + width/2 for i in x],
-            df["tackles_p90"],
-            width,
-            label="Tackles p90"
-        )
+    ax.bar(
+        [i + width/2 for i in x],
+        df["tackles_p90"],
+        width,
+        label="Tackles p90"
+    )
 
-        ax.set_xticks(x)
-        ax.set_xticklabels(
-            df["player"],
-            rotation=45,
-            ha="right"
-        )
+    ax.set_xticks(x)
+    ax.set_xticklabels(
+        df["player"],
+        rotation=45,
+        ha="right"
+    )
 
-        ax.set_ylabel("Per 90 minutes")
-        ax.set_title("Top Players - Pressures p90 vs Tackles p90")
-        ax.legend()
+    ax.set_title("Top Players - Pressures p90 vs Tackles p90")
+    ax.legend()
 
-        plt.tight_layout()
-        plt.show()
-
-    def shots_goals_xg_p90_barplot(df):
-        df = df.sort_values(
-            by="shots_p90",
-            ascending=False
-        ).head(10)
-
-        fig, ax = plt.subplots(figsize=(12, 6))
-
-        x = range(len(df))
-        width = 0.4
-
-        ax.bar(
-            [i - width/2 for i in x],
-            df["shots_p90"],
-            width,
-            label="Shots p90"
-        )
-
-        ax.bar(
-            [i + width/2 for i in x],
-            df["goals_p90"],
-            width,
-            label="Goals p90"
-        )
-
-        ax.bar(
-            [i + width/2 for i in x],
-            df["xG_p90"],
-            width,
-            label="xG p90"
-        )
-
-        ax.set_xticks(x)
-        ax.set_xticklabels(
-            df["player"],
-            rotation=45,
-            ha="right"
-        )
-
-        ax.set_ylabel("Per 90 minutes")
-        ax.set_title("Top Players - Shots p90 vs Goals p90 vs xG p90")
-        ax.legend()
-
-        plt.tight_layout()
-        plt.show()  
+    plt.tight_layout()
+    plt.show()
 
 
+def shots_goals_xg_p90_barplot(df):
+    df = df.sort_values(
+        by="shots_p90",
+        ascending=False
+    ).head(10)
 
+    fig, ax = plt.subplots(figsize=(12, 6))
 
-   
+    x = range(len(df))
+    width = 0.25
+
+    ax.bar(
+        [i - width for i in x],
+        df["shots_p90"],
+        width,
+        label="Shots p90"
+    )
+
+    ax.bar(
+        [i for i in x],
+        df["goals_p90"],
+        width,
+        label="Goals p90"
+    )
+
+    ax.bar(
+        [i + width for i in x],
+        df["xG_p90"],
+        width,
+        label="xG p90"
+    )
+
+    ax.set_xticks(x)
+    ax.set_xticklabels(
+        df["player"],
+        rotation=45,
+        ha="right"
+    )
+
+    ax.set_ylabel("Per 90 minutes")
+    ax.set_title("Top Players - Shots p90 vs Goals p90 vs xG p90")
+    ax.legend()
+
+    plt.tight_layout()
+    plt.show()

@@ -162,5 +162,5 @@ def calculate_player_statistics(events, player_name):
 
     player_events = events[events["player"] == player_name]
 
-    return calculate_player(player_events)
+    return pd.DataFrame([calculate_player(player_events)])
     

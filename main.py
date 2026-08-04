@@ -3,18 +3,11 @@ import pandas as pd
 import warnings
 from statsbombpy.api_client import NoAuthWarning
 
-
-
-
-from src.data.team_selection import team_selection
-from src.features.player_events import calculate_player_statistics
-from src.features.player_events import calculate_players_statistics
-from src.features.player_by_game_time import calculate_minutes
-from src.features.feature_engineering import create_features
-from src.visualization.charts import goals_xg_p90_barplot
-from src.visualization.charts import pressures_and_tackles_p90_barplot
-from src.visualization.charts import passes_completed_passes_p90_barplot
-
+import src.data.team_selection
+import src.features.player_events
+import src.features.player_by_game_time
+import src.features.feature_engineering
+import src.visualization.charts
 
 warnings.filterwarnings("ignore", category=NoAuthWarning)
 
@@ -28,7 +21,8 @@ matches = sb.matches(
 player = input("Choose a player to analyze:\n")
 player_statistics = []
 
-team = team_selection(matches)
+
+team = src.data.team_selection.team_selection(matches)
 
 print("...loading data for team:", team)
 
@@ -45,10 +39,9 @@ for match_id in matches["match_id"]:
     if events.empty:
         continue
 
-    stats = calculate_players_statistics(events)
-    player_statistics = calculate_player_statistics(events, player)
+    stats = src.features.player_events.calculate_players_statistics(events)
 
-    minutes = calculate_minutes(events)
+    minutes = src.features.player_by_game_time.calculate_minutes(events)
 
     stats = stats.merge(
         minutes,
@@ -114,14 +107,31 @@ metrics = [
 ]
 
 for metric in metrics:
-
     season_statistics[f"{metric}_p90"] = (
         season_statistics[metric] /
         season_statistics["minutes"]
     ) * 90
 
-season_statistics = create_features(
+season_statistics = src.features.feature_engineering.create_features(
     season_statistics
+)
+
+if player.strip():
+    player_df = season_statistics[
+        season_statistics["player"].str.contains(player.strip(), case=False, na=False)
+    ]
+    if not player_df.empty:
+        player_statistics = player_df
+    else:
+        print(f"Player '{player}' not found. Analyzing all team players for charts.")
+        player_statistics = season_statistics
+else:
+    player_statistics = season_statistics
+
+player_statistics.to_csv(
+    "player_statistics.csv",
+    index=False,
+    encoding="utf-8-sig"
 )
 
 season_statistics.to_csv(
@@ -175,9 +185,9 @@ top3_midfielders.to_csv(
     encoding="utf-8-sig"
 )
 
-goals_xg_p90_barplot(player_statistics)
-pressures_and_tackles_p90_barplot(player_statistics)
-passes_completed_passes_p90_barplot(player_statistics)
+src.visualization.charts.goals_xg_p90_barplot(player_statistics)
+src.visualization.charts.pressures_and_tackles_p90_barplot(player_statistics)
+src.visualization.charts.passes_completed_passes_p90_barplot(player_statistics)
 
 
 print("Charts and statistics have been generated.")
