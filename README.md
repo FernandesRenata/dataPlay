@@ -24,29 +24,6 @@ DataPlay is a Python project for football data analysis using the StatsBomb open
 
 ---
 
-## Project Structure
-
-```
-DataPlay/
-│
-├── src/
-│   ├── data/
-│   │   └── team_selection.py
-│   │
-│   ├── features/
-│   │   ├── player_events.py
-│   │   ├── player_by_game_time.py
-│   │   └── feature_engineering.py
-│   │
-│   └── visualization/
-│       └── charts.py
-│
-├── main.py
-└── README.md
-```
-
----
-
 ## How It Works
 
 ### 1. Load Competition Data
